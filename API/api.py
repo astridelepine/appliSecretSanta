@@ -5,35 +5,35 @@ import sqlite3
 bd = r'appliNoel.db'
 #conn = sqlite3.connect('appliNoel.db')
 #cursor = conn.cursor()
-fonction.create_connection(bd)
+#fonction.create_connection(bd)
 
 app = FastAPI()
-@app.get("/beneficiaire/{prenom}")
-@app.get("/mdp/{prenom}")
-@app.get("/prenom/{prenom}")
-@app.get("/compatibilite/{prenom}")
 
+@app.get("/beneficiaire/{prenom}")
 def getbeneficiaire(prenom) :
     conn = fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recupcadeaua(prenom, cursor)
+    result = fonction.recupinfoviaprenom(prenom, "personne", "cadeaua",cursor)
     return result
 
+@app.get("/mdp/{prenom}")
 def getmdp(prenom) :
     conn = fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recupmdp(prenom, cursor)
+    result = fonction.recupinfoviaprenom(prenom, "personne", "mdp",cursor)
     return result
 
+@app.get("/prenom/{prenom}")
 def getprenom(prenom) :
     conn =fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recuprenom(prenom, cursor)
+    result = fonction.recupinfoviaprenom(prenom, "personne", "prenom",cursor)
     return result
 
+@app.get("/compatibilite/{prenom}")
 def getcompatibilite(prenom) :
     conn =fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recupcadeaua(prenom, cursor)
+    result = fonction.recupinfoviaprenom(prenom, "compatibilite", "compatible",cursor)
     result = list(result.strip())
     return result 
