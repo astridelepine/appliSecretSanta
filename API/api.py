@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Path, Query, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 import fonction
 import sqlite3
+
 
 bd = r'appliNoel.db'
 #conn = sqlite3.connect('appliNoel.db')
@@ -8,6 +10,15 @@ bd = r'appliNoel.db'
 #fonction.create_connection(bd)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 
 @app.get("/beneficiaire/{prenom}")
 def getbeneficiaire(prenom) :

@@ -16,9 +16,12 @@ def create_connection(db_file):
   return conn
 
 def recupinfoviaprenom (prenom,nomtable, nomcol, cur) :
-    cur.execute(f"SELECT {nomcol} FROM %s where lower(prenom) = lower(?)" %nomtable, (prenom,))
-    row = cur.fetchone()
-    rep = row[0]
+    try :
+      cur.execute(f"SELECT {nomcol} FROM %s where lower(prenom) = lower(?)" %nomtable, (prenom,))
+      row = cur.fetchone()
+      rep = row[0]
+    except :
+        rep = 'null'
     return rep
 
 # def recupmdp(prenom,cur):
@@ -48,10 +51,6 @@ def remplirlistfromtable(table, numcol, cur) :
       liste.append(row[numcol])
     return liste
 
-prenom = "prenom"
-compatibiliter = "groupe"  
-dejaattribuer = "aqlqun"
-beneficiaire = "cadeaua"
 
 def tirehasard(tableinfo, tablecompatible, cur, connection, liste) :
     prenom = "prenom"
@@ -79,14 +78,12 @@ def tirehasard(tableinfo, tablecompatible, cur, connection, liste) :
             rep = cur.fetchone()
             estattribuer = rep[0]
             
-              
             for c in cptblej :
                 if c in cptblei :
                     possible = False 
 
             if possible == True and estattribuer == 0:
                 tabpossible.append(prenomj)
-                print(tabpossible)
             
         nbgens = len(tabpossible)
         if nbgens == 0 :
@@ -103,11 +100,11 @@ def tirehasard(tableinfo, tablecompatible, cur, connection, liste) :
             info = (1, personneattribuer)
             cur.execute(sql, info)
 
-            cur = conn.cursor()
-            cur.execute("SELECT * FROM %s" %tableinfo)
-            rows = cur.fetchall()
-            for row in rows:
-                print(row)
+            # cur = conn.cursor()
+            # cur.execute("SELECT * FROM %s" %tableinfo)
+            # rows = cur.fetchall()
+            # for row in rows:
+            #     print(row)
 
 
 def remplirbd(tableinfo, tablecompatible, cur, connection) :
