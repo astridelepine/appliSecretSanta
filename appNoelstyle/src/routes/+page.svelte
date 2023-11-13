@@ -23,7 +23,7 @@
 	
 	const prenombd = async() => {
 		let error = null;
-		let response = await fetch(`http://127.0.0.1:8000/prenom/${prenom}`);
+		let response = await fetch(`https://noel-api.super-sympa.fr/prenom/${prenom}`);
 
 		response = await response.json();
 		repprenom = await response;
@@ -34,7 +34,7 @@
 	
 	const mdpbd = async() => {
 		let error = null;
-		let response = await fetch(`http://127.0.0.1:8000/mdp/${prenom}`);
+		let response = await fetch(`https://noel-api.super-sympa.fr/mdp/${prenom}`);
 		
 		response = await response.json();
 		repmdp = response;
@@ -43,7 +43,7 @@
 
 	const recupbeneficiaire = async() => {
 		let error = null;
-		let response = await fetch(`http://127.0.0.1:8000/beneficiaire/${prenom}`);
+		let response = await fetch(`https://noel-api.super-sympa.fr/beneficiaire/${prenom}`);
 
 		response = await response.json();
 		repbenf = response;
