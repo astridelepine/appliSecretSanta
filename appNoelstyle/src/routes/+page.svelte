@@ -107,9 +107,9 @@
 			</div>
 		{:else}
 			<div id='id' class=" flex flex-col items-center rounded-xl border-black ml-3 mt-4 px-7 py-4 shadow-md">
-				<h1 class = "flex center"> <img class="object-cover h-7 w-7" src="https://www.gifimili.com/gif/2018/05/smiley-guirlande-de-noel.gif"  alt="Smiley Guirlande de Noël"> Qui es-tu ? <img class="object-cover h-7 w-7" src="https://www.gifimili.com/gif/2018/05/smiley-guirlande-de-noel.gif"  alt="Smiley Guirlande de Noël"></h1>
+				<img class=" h-16 " src="https://www.gifimili.com/gif/2018/02/papa-noel-danse-avec-les-rennes.gif" alt="Papa Noël danse avec les rennes">
 				<p> <br/> Tu as pour mission d'offrir </p>
-				<p class = "mb-3"> un cadeau a {repbenf} !!! <br/> </p>
+				<p class = "mb-4"> un cadeau a {repbenf} !!! <br/> </p>
 				
 				<button on:click = {() => {afficher = false}} type="submit" class = " text-center border border-1 rounded border-black w-fit px-2 flex " > Retour </button>
 			</div>
