@@ -4,7 +4,7 @@ import fonction
 import sqlite3
 
 
-bd = r'appliNoel.db'
+bd = r'../appliNoel.db'
 #conn = sqlite3.connect('appliNoel.db')
 #cursor = conn.cursor()
 #fonction.create_connection(bd)
@@ -20,31 +20,38 @@ app.add_middleware(
 )
 
 
-@app.get("/beneficiaire/{prenom}")
-def getbeneficiaire(prenom) :
+@app.get("/beneficiaire/{groupe}/{prenom}")
+def getbeneficiaire(groupe, prenom) :
     conn = fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recupinfoviaprenom(prenom, "personne", "cadeaua",cursor)
+    result = fonction.recupinfoviaprenom(groupe, prenom, "personne", "cadeaua",cursor)
     return result
 
-@app.get("/mdp/{prenom}")
-def getmdp(prenom) :
+@app.get("/mdp/{groupe}/{prenom}")
+def getmdp(groupe, prenom) :
     conn = fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recupinfoviaprenom(prenom, "personne", "mdp",cursor)
+    result = fonction.recupinfoviaprenom(groupe, prenom, "personne", "mdp",cursor)
     return result
 
-@app.get("/prenom/{prenom}")
-def getprenom(prenom) :
+@app.get("/prenom/{groupe}/{prenom}")
+def getprenom(groupe, prenom) :
     conn =fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recupinfoviaprenom(prenom, "personne", "prenom",cursor)
+    result = fonction.recupinfoviaprenom(groupe, prenom, "personne", "prenom",cursor)
     return result
 
-@app.get("/compatibilite/{prenom}")
-def getcompatibilite(prenom) :
+@app.get("/compatibilite/{groupe}/{prenom}")
+def getcompatibilite(groupe, prenom) :
     conn =fonction.create_connection(bd)
     cursor = conn.cursor()
-    result = fonction.recupinfoviaprenom(prenom, "compatibilite", "compatible",cursor)
+    result = fonction.recupinfoviaprenom(groupe, prenom, "compatibilite", "compatible",cursor)
     result = list(result.strip())
+    return result 
+
+@app.get("/nomgroupe/")
+def getcompatibilite() :
+    conn = fonction.create_connection(bd)
+    cursor = conn.cursor()
+    result = fonction.recupNomsGroupes(cursor)
     return result 

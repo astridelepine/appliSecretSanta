@@ -1,134 +1,39 @@
 <script>
-	//import './styles.css';
-	import '../style/app.css';
-	import { writable, derived } from 'svelte/store';
-	import {tick} from 'svelte';
-	
-	let repprenom = null;
-	let repmdp = '';
-	let repbenf = null;
-	
-	let codebon;
-	let afficher = false;
-	let prenom = '';
-	let mdp = '';
+	import './styles.css';
+	import {onMount} from 'svelte';
 
-	// $:console.log(prenom ==='' && mdp ==='');
-	// $:console.log(prenom)
+	let repgroupes = [];
 
-	
-	// $:console.log(prenom ==='' && mdp ==='');
-	// $:console.log(prenombd);
-	// $:console.log(repmdp);
-	
-	const prenombd = async() => {
-		let error = null;
-		let response = await fetch(`https://noel-api.super-sympa.fr/prenom/${prenom}`);
+	onMount (async() => {
+		let response = await fetch(`http://127.0.0.1:8000/nomgroupe/`);
 
 		response = await response.json();
-		repprenom = await response;
-		$:console.log(repprenom);
-		
-	};
+		repgroupes = await response;
+		$:console.log(repgroupes);
+		$:console.log("ahhhhhhhh");
+	});
 
-	
-	const mdpbd = async() => {
-		let error = null;
-		let response = await fetch(`https://noel-api.super-sympa.fr/mdp/${prenom}`);
-		
-		response = await response.json();
-		repmdp = response;
-		
-	};
-
-	const recupbeneficiaire = async() => {
-		let error = null;
-		let response = await fetch(`https://noel-api.super-sympa.fr/beneficiaire/${prenom}`);
-
-		response = await response.json();
-		repbenf = response;
-		
-	};
-
-	const traitementbouton = async (e) => {
-			e.preventDefault();
-			await prenombd();
-			await mdpbd();
-			await recupbeneficiaire();
-			
-			if(mdp == repmdp){	
-				codebon = true;
-				$:console.log(codebon);
-			}
-			else{
-				codebon = false;
-			}
-
-
-			if(repprenom!= 'null' && repmdp == mdp){
-				afficher = true;
-				
-			}
-			
-		};
-	
-
+	$:console.log(repgroupes);
 </script>
 
 <div id='page' class="h-screen">
-	<header>
-		<p class="text-center text-2xl pt-5 "> Secret Santa famille <br/> Rabatel </p>
-	</header>
 	
 	<main class=" items-center justify-center">
+		{#each repgroupes as groupe, index }
+			<button on:click={()=>{window.location.href = `/connexion/${groupe}`}}> Secret Santa {groupe}</button>
+		{/each} 
 
-		{#if afficher == false}
-			<div id='id' class=" flex flex-col items-center rounded-xl border-black ml-3 mt-4 px-7 py-4 shadow-md">
-				<h1 class = "flex center"> <img class="object-cover h-7 w-7" src="https://www.gifimili.com/gif/2018/05/smiley-guirlande-de-noel.gif"  alt="Smiley Guirlande de Noël"> Qui es-tu ? <img class="object-cover h-7 w-7" src="https://www.gifimili.com/gif/2018/05/smiley-guirlande-de-noel.gif"  alt="Smiley Guirlande de Noël"></h1>
-				<form on:submit={traitementbouton} class = "flex flex-col items-center">
-					<label class ="mb-2 mt-3 flex"> Ton nom :
-						<input bind:value={ prenom } class = "border border-1 rounded border-black ml-3 bg" type= 'text' name="prenom" maxlength="55" size="7" />
-					</label>
-			
-					<label class ="mb-5"> Ton code :
-						<input bind:value={ mdp } class = "border border-1 rounded border-black ml-3" type= 'password' name="code" maxlength="55" size="7" />
-					</label>
-					<button disabled={prenom==='' || mdp===''} type="submit" class = " text-center border border-1 rounded border-black w-fit px-2 flex " > Voir </button>
-				</form>
-
-				{#if repprenom === 'null'}
-					<p> <br/> je crois que tu ne fais pas partie de ce secret Santa  </p>
-				{:else if codebon == false}
-					<p> <br/> hopopop mauvais code... </p>
-				{:else}
-					<p> </p>
-				{/if}
-
-			</div>
-		{:else}
-			<div id='id' class=" flex flex-col items-center rounded-xl border-black ml-3 mt-4 px-7 py-4 shadow-md">
-				<img class=" h-16 " src="https://www.gifimili.com/gif/2018/02/papa-noel-danse-avec-les-rennes.gif" alt="Papa Noël danse avec les rennes">
-				<p> <br/> Tu as pour mission d'offrir </p>
-				<p class = "mb-4"> un cadeau à {repbenf} !!! <br/> </p>
-				
-				<button on:click = {() => {afficher = false}} type="submit" class = " text-center border border-1 rounded border-black w-fit px-2 flex " > Retour </button>
-			</div>
-		
-		{/if}
-		
-		
 			
 	</main>
 	
-	<footer>
-
-	</footer>
 </div>
 
 <style>
 
 	#page {
-		background-color: #ececec;
+		width: 100vw;
+		margin: 0;
+		background-color: #eaeaea;
 	}
 
 	#id, input{
@@ -136,7 +41,14 @@
 	}
 	
 	button{
-		background-color: #eaeaea;
+		background-color: #fffcfc;
+		width:300px;
+		border-radius: 10px ;
+		padding: 17px;
+		margin: 10px;
+		font-size: 20px;
+		border: none;
+		
 	}
 
 	.app {
@@ -149,19 +61,12 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		padding: 1rem;
 		width: 100%;
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
 	}
 
 	@media (min-width: 480px) {

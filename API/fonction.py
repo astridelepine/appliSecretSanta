@@ -1,8 +1,5 @@
 import sqlite3, random
 from sqlite3 import Error
-conn = conn = sqlite3.connect('appliNoel.db')
-
-cursor = conn.cursor()
 
 
 def create_connection(db_file):
@@ -15,23 +12,30 @@ def create_connection(db_file):
     print(e)
   return conn
 
-def recupinfoviaprenom (prenom,nomtable, nomcol, cur) :
+def recupinfoviaprenom (groupe, prenom,nomtable, nomcol, cur) :
     try :
-      cur.execute(f"SELECT {nomcol} FROM %s where lower(prenom) = lower(?)" %nomtable, (prenom,))
+      cur.execute(f"SELECT {nomcol} FROM %s where lower(prenom) = lower(?) and nomgroupe = ?" %nomtable, (prenom, groupe, ))
       row = cur.fetchone()
       rep = row[0]
     except :
-        rep = 'null'
+        rep = 'nulleeee'
     return rep
 
+def recupNomsGroupes(cur) :
+   try :
+      cur.execute("SELECT nomgroupe FROM personne group by nomgroupe")
+      rows = cur.fetchall()
+      listgp = []
+      for row in rows : 
+         listgp.append(row[0])
+      rep = listgp
+      
+   except :
+        rep = 'null'
+   return rep
+   
 # def recupmdp(prenom,cur):
 #     cur.execute("SELECT mdp FROM personne where lower(prenom) = lower(?)", (prenom,))
-#     row = cur.fetchone()
-#     rep = row[0]
-#     return rep
-
-# def recuprenom(prenom,cur):
-#     cur.execute("SELECT prenom FROM personne where lower(prenom) = lower(?)", (prenom,))
 #     row = cur.fetchone()
 #     rep = row[0]
 #     return rep
@@ -42,9 +46,9 @@ def recupinfoviaprenom (prenom,nomtable, nomcol, cur) :
 #     rep = row[0]
 #     return rep
 
-def remplirlistfromtable(table, numcol, cur) :
+def remplirlistfromtable(table, nomgp, numcol, cur) :
     liste = []
-    cur.execute("SELECT * FROM %s" %table)
+    cur.execute("SELECT * FROM %s where nomgroupe = ?" %table, (nomgp, ))
     rows = cur.fetchall()
     for row in rows:
       #verifier que numcol soit un entier !!! ??
@@ -52,14 +56,14 @@ def remplirlistfromtable(table, numcol, cur) :
     return liste
 
 
-def tirehasard(tableinfo, tablecompatible, cur, connection, liste) :
+def tirehasard(tableinfo, tablecompatible, nomgp, cur, connection, liste) :
     prenom = "prenom"
     compatibiliter = "groupe"  
     dejaattribuer = "aqlqun"
     beneficiaire = "cadeaua"   
     for i in liste :
         tabpossible = []
-        cur.execute(f"SELECT {prenom}, {compatibiliter} FROM {tablecompatible} where lower(prenom) = lower(?)", (i,))
+        cur.execute(f"SELECT {prenom}, {compatibiliter} FROM {tablecompatible} where lower(prenom) = lower(?) and nomgroupe = ?", (i, nomgp, ))
         result = cur.fetchone()
         prenomi = result[0]
         cptblei = result[1]
@@ -67,14 +71,14 @@ def tirehasard(tableinfo, tablecompatible, cur, connection, liste) :
         # cur.execute("SELECT * FROM %s where lower(prenom) = lower(?)" %tableinfo, (i,))
         # result = cur.fetchone()
         
-        cur.execute(f"SELECT {prenom}, {compatibiliter} FROM {tablecompatible}")
+        cur.execute(f"SELECT {prenom}, {compatibiliter} FROM {tablecompatible} where nomgroupe = ?  ", (nomgp,))
         rows = cur.fetchall()
         for row in rows:
             possible = True
             prenomj = row[0]
             cptblej = row[1]
             cptblej = list(cptblej.strip())
-            cur.execute(f"SELECT {dejaattribuer} FROM {tableinfo} where lower(prenom) = lower(?)", (prenomj,))
+            cur.execute(f"SELECT {dejaattribuer} FROM {tableinfo} where lower(prenom) = lower(?) and nomgroupe = ? ", (prenomj, nomgp))
             rep = cur.fetchone()
             estattribuer = rep[0]
             
@@ -87,7 +91,7 @@ def tirehasard(tableinfo, tablecompatible, cur, connection, liste) :
             
         nbgens = len(tabpossible)
         if nbgens == 0 :
-            tirehasard(tableinfo, tablecompatible, cur, connection, liste)
+            tirehasard(tableinfo, tablecompatible, nomgp, cur, connection, liste)
         else :
             n = random.randint(0,nbgens-1)
             personneattribuer = tabpossible[n]
@@ -107,15 +111,20 @@ def tirehasard(tableinfo, tablecompatible, cur, connection, liste) :
             #     print(row)
 
 
-def remplirbd(tableinfo, tablecompatible, cur, connection) :
-    listegens = remplirlistfromtable(tableinfo,0,cur)
-    tirehasard(tableinfo, tablecompatible, cur, connection, listegens)
+def remplirbd(tableinfo, tablecompatible, nomgp, cur, connection) :
+    listegens = remplirlistfromtable(tableinfo, nomgp, 0,cur)
+    tirehasard(tableinfo, tablecompatible, nomgp, cur, connection, listegens)
     connection.commit()
 
-#remplirbd("personne", "compatibilite", cursor, conn)
 
+# conn = sqlite3.connect('appliNoel.db')
 # cur = conn.cursor()
-# cur.execute("SELECT * FROM personne")
+# remplirbd("personne", "compatibilite", 'supersympa', cur, conn)
+
+
+# conn = sqlite3.connect('appliNoel.db')
+# cur = conn.cursor()
+# cur.execute("SELECT * FROM p")
 # rows = cur.fetchall()
 # for row in rows:
 #     print(row)
