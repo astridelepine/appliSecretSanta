@@ -19,11 +19,13 @@
 <div id='page' class="h-screen">
 	
 	<main class=" items-center justify-center">
-		{#each repgroupes as groupe, index }
-			<button on:click={()=>{window.location.href = `/connexion/${groupe}`}}> Secret Santa {groupe}</button>
-		{/each} 
-
-			
+		<img src= "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXprMWgxaDV0Mm15ZnV6aHEwY3VwOWdubjIwajA3M3hhYXMwYXpyYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8muFpxW47Gr3W/giphy.gif"/>
+		<div id ="btns">
+			{#each repgroupes as groupe, index }
+				<button on:click={()=>{window.location.href = `/connexion/${groupe}`}}> Secret Santa {groupe}</button>
+			{/each}
+		</div>
+		<img src = "https://i.makeagif.com/media/12-28-2020/kUdRKw.gif"/>
 	</main>
 	
 </div>
@@ -51,17 +53,12 @@
 		
 	}
 
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
-
 	main {
 		flex: 1;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		gap:100px;
 		padding: 1rem;
 		width: 100%;
 		max-width: 64rem;
@@ -69,9 +66,21 @@
 		box-sizing: border-box;
 	}
 
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
+	#btns{
+		display: flex;
+		flex-direction: column;
+	}
+
+	img{
+		height: 200px;
+	}
+	@media (max-width: 700px) {
+		img {
+			height: 100px;
+		}
+		main{
+			flex-direction: column;
+			gap: 10px;
 		}
 	}
 </style>

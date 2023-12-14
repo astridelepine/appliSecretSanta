@@ -27,7 +27,8 @@ body {
 
 header {
 	justify-items: center;
-	font-size: 50px;
+	gap: 30px;
+	font-size: 40px;
 	justify-content: center;
 	display: flex;
 	align-items: center;
