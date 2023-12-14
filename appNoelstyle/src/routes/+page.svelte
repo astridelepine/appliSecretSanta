@@ -5,15 +5,12 @@
 	let repgroupes = [];
 
 	onMount (async() => {
-		let response = await fetch(`http://127.0.0.1:8000/nomgroupe/`);
+		let response = await fetch(`https://noel-api.super-sympa.fr/nomgroupe/`);
 
 		response = await response.json();
 		repgroupes = await response;
-		$:console.log(repgroupes);
-		$:console.log("ahhhhhhhh");
 	});
-
-	$:console.log(repgroupes);
+	
 </script>
 
 <div id='page' class="h-screen">
