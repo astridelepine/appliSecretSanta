@@ -1,3 +1,5 @@
-API/testbd.py
-API/tireHasard.py
-API/bdNoel.py
+testbd.py
+tireHasard.py
+bdNoel.py
+.venv/
+__pycache__/
