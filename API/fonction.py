@@ -117,9 +117,9 @@ def remplirbd(tableinfo, tablecompatible, nomgp, cur, connection) :
     connection.commit()
 
 
-# conn = sqlite3.connect('appliNoel.db')
-# cur = conn.cursor()
-# remplirbd("personne", "compatibilite", 'supersympa', cur, conn)
+conn = sqlite3.connect('appliNoel.db')
+cur = conn.cursor()
+remplirbd("personne", "compatibilite", 'supersympa', cur, conn)
 
 
 # conn = sqlite3.connect('appliNoel.db')
