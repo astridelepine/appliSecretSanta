@@ -113,13 +113,14 @@ def tirehasard(tableinfo, tablecompatible, nomgp, cur, connection, liste) :
 
 def remplirbd(tableinfo, tablecompatible, nomgp, cur, connection) :
     listegens = remplirlistfromtable(tableinfo, nomgp, 0,cur)
+    print(listegens)
     tirehasard(tableinfo, tablecompatible, nomgp, cur, connection, listegens)
     connection.commit()
 
 
-conn = sqlite3.connect('appliNoel.db')
+conn = sqlite3.connect('appliNoel2025.db')
 cur = conn.cursor()
-remplirbd("personne", "compatibilite", 'supersympa', cur, conn)
+remplirbd("personne", "compatibilite", 'Delepine', cur, conn)
 
 
 # conn = sqlite3.connect('appliNoel.db')

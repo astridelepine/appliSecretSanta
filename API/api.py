@@ -2,9 +2,9 @@ from fastapi import FastAPI, Path, Query, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 import fonction
 import sqlite3
+import os
 
-
-bd = r'../appliNoel.db'
+bd = f'../{ os.getenv("file_bd")}'
 #conn = sqlite3.connect('appliNoel.db')
 #cursor = conn.cursor()
 #fonction.create_connection(bd)
@@ -18,7 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
 
 @app.get("/beneficiaire/{groupe}/{prenom}")
 def getbeneficiaire(groupe, prenom) :
@@ -40,6 +39,16 @@ def getprenom(groupe, prenom) :
     cursor = conn.cursor()
     result = fonction.recupinfoviaprenom(groupe, prenom, "personne", "prenom",cursor)
     return result
+
+@app.get("/user/{groupe}/{prenom}/{mdp}")
+def getuser(groupe, prenom, mdp) :
+    conn =fonction.create_connection(bd)
+    cursor = conn.cursor()
+    result = fonction.recupinfoviaprenom(groupe, prenom, "personne", "mdp",cursor)
+    if result == mdp :
+        return fonction.recupinfoviaprenom(groupe, prenom, "personne", "prenom",cursor)
+    else :
+        return False
 
 @app.get("/compatibilite/{groupe}/{prenom}")
 def getcompatibilite(groupe, prenom) :

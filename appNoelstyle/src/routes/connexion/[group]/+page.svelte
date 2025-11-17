@@ -2,13 +2,22 @@
 	import '../../styles.css';
 	import '../../../style/app.css';
 	import {onMount, tick} from 'svelte';
-    
-	
+	import {PUBLIC_URL_API} from '$env/static/public'
+
+	/**
+   * @type {string | null}
+   */
 	let repprenom = null;
 	let repmdp = '';
+	/**
+   * @type {Response | boolean | null}
+   */
 	let repbenf = null;
 	
-	let codebon;
+	/**
+   * @type {boolean | Response}
+   */
+	let user;
 	let afficher = false;
 	let prenom = '';
 	let mdp = '';
@@ -21,54 +30,79 @@
 		group = url.split("/")[4];
 	})
 	 
-	const prenombd = async() => {
-		let error = null;
-		let response = await fetch(`https://noel-api.super-sympa.fr/prenom/${group}/${prenom}`);
+	// const prenombd = async() => {
+	// 	let error = null;
+	// 	let response = await fetch(`https://noel-api.super-sympa.fr/prenom/${group}/${prenom}`);
 
-		response = await response.json();
-		repprenom = await response;
+	// 	response = await response.json();
+	// 	repprenom = await response;
 		
-	};
+	// };
 
 	
-	const mdpbd = async() => {
+	// const mdpbd = async() => {
+	// 	let error = null;
+	// 	let response = await fetch(`https://noel-api.super-sympa.fr/mdp/${group}/${prenom}`);
+		
+	// 	response = await response.json();
+	// 	repmdp = response;
+		
+	// };
+
+	const userbd = async() => {
 		let error = null;
-		let response = await fetch(`https://noel-api.super-sympa.fr/mdp/${group}/${prenom}`);
-		
+		let response = await fetch(`${PUBLIC_URL_API}/user/${group}/${prenom}/${mdp}`);
+
 		response = await response.json();
-		repmdp = response;
-		
+		if(response){
+			repprenom = prenom;
+			repbenf = response;
+		} else {
+			repprenom = 'null';
+		}
+		return response;
 	};
 
 	const recupbeneficiaire = async() => {
 		let error = null;
-		let response = await fetch(`https://noel-api.super-sympa.fr/beneficiaire/${group}/${prenom}`);
+		let response = await fetch(`${PUBLIC_URL_API}/beneficiaire/${group}/${prenom}`);
 
 		response = await response.json();
 		repbenf = response;
+		console.log(repbenf);
 		
 	};
 
 	const traitementbouton = async (e) => {
 			e.preventDefault();
-			await prenombd();
-			await mdpbd();
-			await recupbeneficiaire();
-			
-			if(mdp == repmdp){	
-				codebon = true;
-				$:console.log(codebon);
-			}
-			else{
-				codebon = false;
-			}
+			user = await userbd();
+			// await prenombd();
+			// await mdpbd();
+			try {
+			const responseUser = await fetch(`${PUBLIC_URL_API}/user/${group}/${prenom}/${mdp}`);
+			const userData = await responseUser.json();
 
+			// const responseBenf = await fetch(`${PUBLIC_URL_API}/beneficiaire/${group}/${prenom}`);
+			// const benfData = await responseBenf.json();
 
-			if(repprenom!= 'null' && repmdp == mdp){
+			if (!userData) {
+				repprenom = null;
+				user = false;
+				repbenf = false;
+			} else {
+				repprenom = prenom;
+				user = true;
+				repbenf = userData;
 				afficher = true;
-				
 			}
-			
+
+			console.log("repprenom:", repprenom);
+			console.log("repbenf:", repbenf);
+
+
+		} catch (err) {
+			console.error(err);
+		}
 		};
 	
 
@@ -95,10 +129,10 @@
 					<button disabled={prenom==='' || mdp===''} type="submit" class = " text-center border border-1 rounded border-black w-fit px-2 flex " > Voir </button>
 				</form>
 
-				{#if repprenom === 'null'}
-					<p> <br/> je crois que tu ne fais pas partie de ce secret Santa  </p>
-				{:else if codebon == false}
-					<p> <br/> hopopop mauvais code... </p>
+				{#if repbenf == false }	
+					<p> <br/> Nom ou mdp incorect </p>
+				<!-- {:else if user === false}
+					<p> <br/> hopopop mauvais code... </p> -->
 				{:else}
 					<p> </p>
 				{/if}

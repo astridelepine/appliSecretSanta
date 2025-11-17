@@ -1,11 +1,12 @@
 <script>
 	import './styles.css';
 	import {onMount} from 'svelte';
+	import {PUBLIC_URL_API} from '$env/static/public'
 
 	let repgroupes = [];
 
 	onMount (async() => {
-		let response = await fetch(`https://noel-api.super-sympa.fr/nomgroupe/`);
+		let response = await fetch(`${PUBLIC_URL_API}/nomgroupe/`);
 
 		response = await response.json();
 		repgroupes = await response;
