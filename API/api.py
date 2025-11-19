@@ -4,10 +4,13 @@ import fonction
 import sqlite3
 import os
 
-bd = f'../{ os.getenv("file_bd")}'
+
+bd = r'../appliNoel2025.db'
 #conn = sqlite3.connect('appliNoel.db')
 #cursor = conn.cursor()
 #fonction.create_connection(bd)
+print(bd)   
+print(type(bd))
 
 app = FastAPI()
 
@@ -46,7 +49,7 @@ def getuser(groupe, prenom, mdp) :
     cursor = conn.cursor()
     result = fonction.recupinfoviaprenom(groupe, prenom, "personne", "mdp",cursor)
     if result == mdp :
-        return fonction.recupinfoviaprenom(groupe, prenom, "personne", "prenom",cursor)
+        return fonction.recupinfoviaprenom(groupe, prenom, "personne", "cadeaua",cursor)
     else :
         return False
 

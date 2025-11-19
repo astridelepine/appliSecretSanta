@@ -118,14 +118,14 @@ def remplirbd(tableinfo, tablecompatible, nomgp, cur, connection) :
     connection.commit()
 
 
+# conn = sqlite3.connect('appliNoel2025.db')
+# cur = conn.cursor()
+# remplirbd("personne", "compatibilite", 'Delepine', cur, conn)
+
+
 conn = sqlite3.connect('appliNoel2025.db')
 cur = conn.cursor()
-remplirbd("personne", "compatibilite", 'Delepine', cur, conn)
-
-
-# conn = sqlite3.connect('appliNoel.db')
-# cur = conn.cursor()
-# cur.execute("SELECT * FROM p")
-# rows = cur.fetchall()
-# for row in rows:
-#     print(row)
+cur.execute("SELECT prenom FROM personne")
+rows = cur.fetchall()
+for row in rows:
+    print(row)
