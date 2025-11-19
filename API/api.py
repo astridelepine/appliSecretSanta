@@ -5,12 +5,12 @@ import sqlite3
 import os
 
 
-bd = r'../appliNoel2025.db'
+bd = r'appliNoel2025.db'
 #conn = sqlite3.connect('appliNoel.db')
 #cursor = conn.cursor()
 #fonction.create_connection(bd)
-print(bd)   
-print(type(bd))
+# print(bd)   
+# print(type(bd))
 
 app = FastAPI()
 

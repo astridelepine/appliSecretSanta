@@ -123,9 +123,9 @@ def remplirbd(tableinfo, tablecompatible, nomgp, cur, connection) :
 # remplirbd("personne", "compatibilite", 'Delepine', cur, conn)
 
 
-conn = sqlite3.connect('appliNoel2025.db')
-cur = conn.cursor()
-cur.execute("SELECT prenom FROM personne")
-rows = cur.fetchall()
-for row in rows:
-    print(row)
+# conn = sqlite3.connect('appliNoel2025.db')
+# cur = conn.cursor()
+# cur.execute("SELECT prenom FROM personne")
+# rows = cur.fetchall()
+# for row in rows:
+#     print(row)
